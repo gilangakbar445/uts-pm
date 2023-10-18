@@ -21,10 +21,15 @@ import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -46,7 +51,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.room.Query
 import com.google.samples.apps.sunflower.R
 import com.google.samples.apps.sunflower.compose.utils.SunflowerImage
 import com.google.samples.apps.sunflower.data.GardenPlanting
@@ -96,8 +103,8 @@ private fun GardenList(
     // Call reportFullyDrawn when the garden list has been rendered
     val gridState = rememberLazyGridState()
     ReportDrawnWhen { gridState.layoutInfo.totalItemsCount > 0 }
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+    LazyHorizontalGrid(
+        rows = GridCells.Fixed(1),
         modifier,
         state = gridState,
         contentPadding = PaddingValues(
@@ -130,18 +137,23 @@ private fun GardenListItem(
 
     ElevatedCard(
         onClick = { onPlantClick(plant) },
-        modifier = Modifier.padding(
+        modifier = Modifier
+            .padding(
             start = cardSideMargin,
             end = cardSideMargin,
-            bottom = dimensionResource(id = R.dimen.card_bottom_margin)
-        ),
+            bottom = dimensionResource(id = R.dimen.card_bottom_margin)),
+
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
     ) {
-        Column(Modifier.fillMaxWidth()) {
+        Column(Modifier
+//            .fillMaxHeight()
+            .width(240.dp)
+        ) {
             SunflowerImage(
                 model = vm.imageUrl,
                 contentDescription = plant.plant.description,
                 Modifier
+//                    .size(width = 100.dp, height = 100.dp),
                     .fillMaxWidth()
                     .height(dimensionResource(id = R.dimen.plant_item_image_height)),
                 contentScale = ContentScale.Crop,
